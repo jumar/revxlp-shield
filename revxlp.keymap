@@ -1,0 +1,106 @@
+/*
+ * Copyright (c) 2020 The ZMK Contributors
+ *
+ * SPDX-License-Identifier: MIT
+ */
+
+#include <behaviors.dtsi>
+#include <dt-bindings/zmk/keys.h>
+#include <dt-bindings/zmk/bt.h>
+#include <dt-bindings/zmk/backlight.h>
+#include <dt-bindings/zmk/mouse.h>
+
+#define QWERTY 0
+#define SYNUM  1
+#define MOMED  2
+#define NAV    3
+#define GAM    4
+#define FN     5
+
+/ {
+    behaviors {
+        bhm: balanced_homerow_mods {
+            compatible = "zmk,behavior-hold-tap";
+            label = "HOMEROW_MODS";
+            #binding-cells = <2>;
+            tapping-term-ms = <200>;    // <---[[moderate duration]]
+            quick-tap-ms = <0>;
+            flavor = "balanced";
+            bindings = <&kp>, <&kp>;
+        };
+    };
+
+    combos {
+        compatible = "zmk,combos";
+        combo_prnt_scrn{
+            timeout-ms = <50>;
+            key-positions = <7 8 9>;
+            bindings = <&kp PSCRN>;
+        };
+    };
+
+    keymap {
+        compatible = "zmk,keymap";
+
+        qwerty_layer {
+            display-name = "Qwerty";
+            bindings = <
+&kp TAB     &kp Q         &kp W          &kp E       &kp R         &kp T   &kp Y   &kp U         &kp I       &kp O          &kp P       &kp BSPC
+&kp CAPS    &lt MOMED A   &bhm LSHIFT S  &lt NAV D   &bhm LCTRL F  &kp G   &kp H   &bhm RCTRL J  &kp K       &bhm RSHIFT L  &kp SEMI    &kp QUOT
+&kp LSHFT   &kp Z         &kp X          &kp C       &kp V         &kp B   &kp N   &kp M         &kp COMMA   &kp DOT        &kp SLASH   &kp BACKSLASH
+                            &mt LGUI ESC  &mt LALT BSPC  &mt LCTRL SPACE  &lt NAV RET  &lt SYNUM DEL  &lt FN GRAVE
+            >;
+        };
+        
+        sym_num_layer {
+            display-name = "Symbols&Numpad";
+            bindings = <
+&kp ESC   &kp EXCL     &kp EQUAL          &kp LPAR   &kp RPAR   &kp PIPE    &kp UNDER    &kp KP_N7   &kp KP_N8   &kp KP_N9   &kp KP_PLUS       &kp KP_NUMLOCK
+&none     &kp PERCENT  &bhm LSHIFT ASTRK  &kp LBRC   &kp RBRC   &kp AMPS    &kp AT       &kp KP_N4   &kp KP_N5   &kp KP_N6   &kp KP_MINUS      &none
+&none     &kp HASH     &kp CARET          &kp LBKT   &kp RBKT   &kp TILDE   &kp DOLLAR   &kp KP_N1   &kp KP_N2   &kp KP_N3   &kp KP_ASTERISK   &none
+                                        &none   &tog GAM   &trans   &trans   &trans   &kp KP_N0
+            >;
+        };
+
+        mouse_media_layer {
+            display-name = "Mouse&Media";
+            bindings = <
+&bt BT_SEL 0 &none  &none  &none  &none  &bt BT_CLR         &msc SCRL_UP    &msc SCRL_LEFT  &mmv MOVE_UP    &msc SCRL_RIGHT  &none  &none
+&bt BT_SEL 1 &none  &none  &none  &none  &none              &msc SCRL_DOWN  &mmv MOVE_LEFT    &mmv MOVE_DOWN  &mmv MOVE_RIGHT    &none  &none
+&bt BT_SEL 2 &none  &none  &none  &none  &studio_unlock     &none  &none  &none  &none  &none  &none
+                                  &none  &none  &none       &mkp LCLK  &mkp RCLK  &mkp MCLK 
+            >;
+        };
+
+        nav_layer {
+            display-name = "Navigation";
+            bindings = <
+&kp PSCRN  &none  &none   &none   &none   &none  &kp PG_UP  &kp HOME  &kp UP    &kp END    &none      &kp PSCRN
+&none      &none  &trans  &trans  &trans  &none  &kp PG_DN  &kp LEFT  &kp DOWN  &kp RIGHT  &kp K_APP  &none
+&none      &none  &none   &none   &none   &none  &kp INS    &none     &none     &none      &none      &none
+                          &trans  &trans  &trans &trans     &kp K_APP &none
+            >;
+        };
+
+        game_layer {
+            display-name = "Gamming";
+            bindings = <
+&kp GRAVE       &kp N1  &kp N2  &kp N3  &kp N4  &kp N5  &kp Y  &kp U   &kp I      &kp O     &kp P     &trans
+&mt LSHIFT TAB  &kp Q   &kp W   &kp E   &kp R   &kp T   &kp H  &kp J   &kp K      &kp L     &kp UP    &trans
+&kp LCTRL       &kp Z   &kp X   &kp C   &kp V   &kp B   &kp N  &kp M   &kp COMMA  &kp LEFT  &kp DOWN  &kp RIGHT
+                    &kp GRAVE   &kp LALT   &kp SPACE    &kp ENTER   &kp DEL   &tog GAM
+            >;
+        };
+
+        fn_layer {
+            display-name = "FN";
+            bindings = <
+&none  &none  &kp F7  &kp F8  &kp F9  &kp F10  &none  &none   &none  &none     &none     &none
+&none  &none  &kp F4  &kp F5  &kp F6  &kp F11  &none  &trans  &none  &trans    &kp UP    &none
+&none  &none  &kp F1  &kp F2  &kp F3  &kp F12  &none  &none   &none  &kp LEFT  &kp DOWN  &kp RIGHT
+                      &trans  &trans  &trans   &trans &trans  &trans 
+            >;
+        };
+        
+    };
+};
